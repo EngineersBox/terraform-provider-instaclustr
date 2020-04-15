@@ -4,6 +4,10 @@ provider "instaclustr" {
 }
 
 resource "instaclustr_encryption_key" "valid" {
+<<<<<<< HEAD
     alias = "%s"
+=======
+    alias = "ic_test_key"
+>>>>>>> e2a4bb19800c323c205c06f49c37775b3319210e
     arn = "%s"
 }

@@ -4,7 +4,11 @@ provider "instaclustr" {
 }
 
 resource "instaclustr_encryption_key" "add_ebs_key" {
+<<<<<<< HEAD
     alias = "<Your KMS key alias here>"
+=======
+    alias = "testkey"
+>>>>>>> e2a4bb19800c323c205c06f49c37775b3319210e
     arn = "<Your KMS key ARN here>"
 }
 
@@ -43,6 +47,32 @@ resource "instaclustr_cluster" "example2" {
   }
 }
 
+<<<<<<< HEAD
+=======
+resource "instaclustr_cluster" "custom_vpc_example" {
+  cluster_name = "testcluster"
+  node_size = "t3.small"
+  data_centre = "US_WEST_2"
+  sla_tier = "NON_PRODUCTION"
+  cluster_network = "10.100.0.0/16"
+  private_network_cluster = false
+  cluster_provider = {
+    name = "AWS_VPC",
+    account_name = "My RIYOA Account"
+    custom_virtual_network_id = "vpc-0a1b2c3d4e5f6g7h8"
+  }
+  rack_allocation = {
+    number_of_racks = 2
+    nodes_per_rack = 1
+  }
+
+  bundle {
+    bundle = "APACHE_CASSANDRA"
+    version = "3.11.4"
+  }
+}
+
+>>>>>>> e2a4bb19800c323c205c06f49c37775b3319210e
 resource "instaclustr_firewall_rule" "example_firewall_rule" {
   cluster_id = "${instaclustr_cluster.example2.id}"
   rule_cidr = "10.1.0.0/16"

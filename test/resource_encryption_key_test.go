@@ -20,6 +20,7 @@ func TestAccEBSKey(t *testing.T) {
 	validConfig, _ := ioutil.ReadFile("data/valid_encryption_key.tf")
 	username := os.Getenv("IC_USERNAME")
 	apiKey := os.Getenv("IC_API_KEY")
+<<<<<<< HEAD
 	kmsAlias := os.Getenv("KMS_ALIAS")
 	kmsArn := os.Getenv("KMS_ARN")
 	oriConfig := fmt.Sprintf(string(validConfig), username, apiKey, kmsAlias, kmsArn)
@@ -27,6 +28,14 @@ func TestAccEBSKey(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccEBSKeyProviders,
 		PreCheck:     func() { testEnvPreCheck(t) },
+=======
+	kmsArn := os.Getenv("KMS_ARN")
+	oriConfig := fmt.Sprintf(string(validConfig), username, apiKey, kmsArn)
+	hostname := instaclustr.ApiHostname
+	resource.Test(t, resource.TestCase{
+		Providers:    testAccEBSKeyProviders,
+		PreCheck:     func() { AccTestEnvVarsCheck(t) },
+>>>>>>> e2a4bb19800c323c205c06f49c37775b3319210e
 		CheckDestroy: testCheckAccEBSResourceDeleted("valid", hostname, username, apiKey),
 		Steps: []resource.TestStep{
 			{
@@ -48,6 +57,7 @@ func TestAccEBSKeyInvalid(t *testing.T) {
 	validConfig, _ := ioutil.ReadFile("data/invalid_encryption_key.tf")
 	username := os.Getenv("IC_USERNAME")
 	apiKey := os.Getenv("IC_API_KEY")
+<<<<<<< HEAD
 	kmsAlias := os.Getenv("KMS_ALIAS")
 	kmsArn := os.Getenv("KMS_ARN")
 	resource.Test(t, resource.TestCase{
@@ -56,12 +66,22 @@ func TestAccEBSKeyInvalid(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      fmt.Sprintf(string(validConfig), username, apiKey, kmsAlias, kmsArn),
+=======
+	kmsArn := os.Getenv("KMS_ARN")
+	resource.Test(t, resource.TestCase{
+		Providers: testAccEBSKeyProviders,
+		PreCheck:  func() { AccTestEnvVarsCheck(t) },
+		Steps: []resource.TestStep{
+			{
+				Config:      fmt.Sprintf(string(validConfig), username, apiKey, kmsArn),
+>>>>>>> e2a4bb19800c323c205c06f49c37775b3319210e
 				ExpectError: regexp.MustCompile("Error adding encryption key"),
 			},
 		},
 	})
 }
 
+<<<<<<< HEAD
 func testEnvPreCheck(t *testing.T) {
 	if v := os.Getenv("IC_USERNAME"); v == "" {
 		t.Fatal("IC_USERNAME for provisioning API must be set for acceptance tests")
@@ -77,6 +97,8 @@ func testEnvPreCheck(t *testing.T) {
 	}
 }
 
+=======
+>>>>>>> e2a4bb19800c323c205c06f49c37775b3319210e
 func testCheckAccEBSResourceValid(resourceName string) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		resourceState := s.Modules[0].Resources["instaclustr_encryption_key."+resourceName]
