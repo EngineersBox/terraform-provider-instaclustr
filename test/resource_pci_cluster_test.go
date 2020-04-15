@@ -26,11 +26,7 @@ func TestAccPCICluster(t *testing.T) {
 	hostname := instaclustr.ApiHostname
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
-<<<<<<< HEAD
-		PreCheck:     func() { testAccPCIPreCheck(t) },
-=======
 		PreCheck:     func() { AccTestEnvVarsCheck(t) },
->>>>>>> e2a4bb19800c323c205c06f49c37775b3319210e
 		CheckDestroy: testCheckPCIResourceDeleted("valid", hostname, username, apiKey),
 		Steps: []resource.TestStep{
 			{
@@ -64,11 +60,7 @@ func TestAccPCIClusterResize(t *testing.T) {
 	hostname := instaclustr.ApiHostname
 	resource.Test(t, resource.TestCase{
 		Providers:    testAccProviders,
-<<<<<<< HEAD
-		PreCheck:     func() { testAccPCIPreCheck(t) },
-=======
 		PreCheck:     func() { AccTestEnvVarsCheck(t) },
->>>>>>> e2a4bb19800c323c205c06f49c37775b3319210e
 		CheckDestroy: testCheckPCIResourceDeleted("resizable_pci_cluster", hostname, username, apiKey),
 		Steps: []resource.TestStep{
 			{
@@ -109,11 +101,7 @@ func TestAccPCIClusterInvalid(t *testing.T) {
 	apiKey := os.Getenv("IC_API_KEY")
 	resource.Test(t, resource.TestCase{
 		Providers: testAccProviders,
-<<<<<<< HEAD
-		PreCheck:  func() { testAccPCIPreCheck(t) },
-=======
 		PreCheck:  func() { AccTestEnvVarsCheck(t) },
->>>>>>> e2a4bb19800c323c205c06f49c37775b3319210e
 		Steps: []resource.TestStep{
 			{
 				Config:      fmt.Sprintf(string(validConfig), username, apiKey),
@@ -123,18 +111,6 @@ func TestAccPCIClusterInvalid(t *testing.T) {
 	})
 }
 
-<<<<<<< HEAD
-func testAccPCIPreCheck(t *testing.T) {
-	if v := os.Getenv("IC_USERNAME"); v == "" {
-		t.Fatal("IC_USERNAME for provisioning API must be set for acceptance tests")
-	}
-	if v := os.Getenv("IC_API_KEY"); v == "" {
-		t.Fatal("IC_API_KEY for provisioning API must be set for acceptance tests")
-	}
-}
-
-=======
->>>>>>> e2a4bb19800c323c205c06f49c37775b3319210e
 func testCheckPCIResourceValid(resourceName string) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
 		resourceState := s.Modules[0].Resources["instaclustr_cluster."+resourceName]
