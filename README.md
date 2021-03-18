@@ -1,6 +1,9 @@
 # Terraform Instaclustr Provider
 
-[![Instaclustr CircleCI](https://img.shields.io/circleci/build/gh/Jack-Kilrain/terraform-provider-instaclustr?logo=circleci&style=for-the-badge)](https://app.circleci.com/pipelines/github/instaclustr/terraform-provider-instaclustr) ![GoLang Version](https://img.shields.io/github/go-mod/go-version/instaclustr/terraform-provider-instaclustr?logo=go&style=for-the-badge) ![Latest Release Version](https://img.shields.io/github/v/release/instaclustr/terraform-provider-instaclustr?logo=github&sort=semver&style=for-the-badge)
+[![Instaclustr CircleCI](https://img.shields.io/circleci/build/gh/Jack-Kilrain/terraform-provider-instaclustr?logo=circleci&style=for-the-badge)](https://app.circleci.com/pipelines/github/instaclustr/terraform-provider-instaclustr)
+![GoLang Version](https://img.shields.io/github/go-mod/go-version/instaclustr/terraform-provider-instaclustr?logo=go&style=for-the-badge)
+![Latest Release Version](https://img.shields.io/github/v/release/instaclustr/terraform-provider-instaclustr?logo=github&sort=semver&style=for-the-badge)
+![License](https://img.shields.io/github/license/instaclustr/terraform-provider-instaclustr?style=for-the-badge)
 
 A [Terraform](http://terraform.io) provider for managing Instaclustr Platform resources.  
 
