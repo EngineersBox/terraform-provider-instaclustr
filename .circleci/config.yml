@@ -1,20 +1,20 @@
 version: 2
 commands: # a reusable command with parameters
-  run_unit_tests:
+  run-unit-tests:
     steps:
       - run:
           name: "Run Project Tests"
           command: |
             make build
             make test
-  run_acceptance_tests:
+  run-acceptance-tests:
     steps:
       - run:
           name: "Run Acceptance Tests"
           command: |
             make build
             make testacc
-  configure_gpg_and_passphrase:
+  configure-gpg-and-passphrase:
     steps:
       - run:
           name: "Import GPG key"
@@ -33,7 +33,7 @@ commands: # a reusable command with parameters
             for keygrip in $(gpg --batch --yes --with-colons --with-keygrip --list-secret-keys ${GIT_EMAIL} | grep grp | sed 's|[grp:,]||g'); do
               /usr/lib/gnupg2/gpg-preset-passphrase --preset --passphrase ${GPG_PASSPHRASE} ${keygrip}
             done
-  build_all_platforms:
+  build-all-platforms:
     steps:
       - run:
           name: "Build for Windows, Linux and OSX and sign the assets"
@@ -56,15 +56,15 @@ commands: # a reusable command with parameters
             env GOOS=windows GOARCH=386 make build VERSION=${CIRCLE_TAG}
             zip -j bin/${FULL_BIN_NAME}_windows_386.zip bin/${FULL_BIN_NAME}
             rm bin/${FULL_BIN_NAME}
-  sign_builds:
+  sign-builds:
     steps:
       - run:
-          name: "Build for Windows, Linux and OSX and sign the assets"
+          name: "Sign the builds with gpg and sha"
           command: |
             cd bin
             shasum -a 256 *.zip > ${SHASUM_NAME}_SHA256SUMS
             gpg --batch --detach-sign --yes ${SHASUM_NAME}_SHA256SUMS
-  clean_gpg_keys:
+  clean-gpg-keys:
     steps:
       - run:
           name: "Clean up GPG keys and kill agent"
@@ -73,7 +73,7 @@ commands: # a reusable command with parameters
               gpg --batch --delete-secret-keys --yes ${fingerprint} || true
             done
             gpg-connect-agent "KILLAGENT" /bye
-  create_github_Release:
+  create-github-release:
     steps:
       - run:
           name: "Publish Release on GitHub"
@@ -95,13 +95,13 @@ jobs:
     steps:
       - checkout
       - run: go get -v -t -d ./...
-      - run_unit_tests
-      - run_acceptance_tests
-      - configure_gpg_and_passphrase
-      - build_all_platforms
-      - sign_builds
-      - clean_gpg_keys
-      - create_github_release
+      - run-unit-tests
+      - run-acceptance-tests
+      - configure-gpg-and-passphrase
+      - build-all-platform
+      - sign-builds
+      - clean-gpg-keys
+      - create-github-release
   build-no-release:
     executor:
     docker:
@@ -110,9 +110,9 @@ jobs:
     steps:
       - checkout
       - run: go get -v -t -d ./...
-      - run_unit_tests
-      - run_acceptance_tests
-      - build_all_platforms
+      - run-unit-tests
+      - run-acceptance-tests
+      - build-all-platforms
 workflows:
   version: 2
   build-and-deploy:
