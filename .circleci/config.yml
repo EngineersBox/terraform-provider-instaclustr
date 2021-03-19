@@ -33,7 +33,7 @@ commands: # a reusable command with parameters
             for keygrip in $(gpg --batch --yes --with-colons --with-keygrip --list-secret-keys ${GIT_EMAIL} | grep grp | sed 's|[grp:,]||g'); do
               /usr/lib/gnupg2/gpg-preset-passphrase --preset --passphrase ${GPG_PASSPHRASE} ${keygrip}
             done
-  build_all_platforms_and_sign:
+  build_all_platforms:
     steps:
       - run:
           name: "Build for Windows, Linux and OSX and sign the assets"
@@ -56,32 +56,14 @@ commands: # a reusable command with parameters
             env GOOS=windows GOARCH=386 make build VERSION=${CIRCLE_TAG}
             zip -j bin/${FULL_BIN_NAME}_windows_386.zip bin/${FULL_BIN_NAME}
             rm bin/${FULL_BIN_NAME}
+  sign_builds:
+    steps:
+      - run:
+          name: "Build for Windows, Linux and OSX and sign the assets"
+          command: |
             cd bin
             shasum -a 256 *.zip > ${SHASUM_NAME}_SHA256SUMS
             gpg --batch --detach-sign --yes ${SHASUM_NAME}_SHA256SUMS
-  build_all_platforms_dont_sign:
-    steps:
-      - run:
-          name: "Build for Windows, Linux and OSX and sign the assets"
-          command: |
-            BIN_NAME="terraform-provider-instaclustr"
-            FULL_BIN_NAME="${BIN_NAME}_${CIRCLE_TAG}"
-            SHASUM_NAME="${BIN_NAME}_${CIRCLE_TAG:1}"
-            env GOOS=linux GOARCH=amd64 make build FLAGS="-tags netgo -a -v" VERSION=${CIRCLE_TAG}
-            zip -j bin/${FULL_BIN_NAME}_alpine_amd64.zip bin/${FULL_BIN_NAME}
-            env GOOS=darwin GOARCH=amd64 make build VERSION=${CIRCLE_TAG}
-            zip -j bin/${FULL_BIN_NAME}_darwin_amd64.zip bin/${FULL_BIN_NAME}
-            env GOOS=linux GOARCH=amd64 make build VERSION=${CIRCLE_TAG}
-            zip -j bin/${FULL_BIN_NAME}_linux_amd64.zip bin/${FULL_BIN_NAME}
-            env GOOS=linux GOARCH=arm64 make build VERSION=${CIRCLE_TAG}
-            zip -j bin/${FULL_BIN_NAME}_linux_arm64.zip bin/${FULL_BIN_NAME}
-            env GOOS=linux GOARCH=arm GOARM=6 make build VERSION=${CIRCLE_TAG}
-            zip -j bin/${FULL_BIN_NAME}_linux_arm.zip bin/${FULL_BIN_NAME}
-            env GOOS=windows GOARCH=amd64 make build VERSION=${CIRCLE_TAG}
-            zip -j bin/${FULL_BIN_NAME}_windows_amd64.zip bin/${FULL_BIN_NAME}
-            env GOOS=windows GOARCH=386 make build VERSION=${CIRCLE_TAG}
-            zip -j bin/${FULL_BIN_NAME}_windows_386.zip bin/${FULL_BIN_NAME}
-            rm bin/${FULL_BIN_NAME}
   clean_gpg_keys:
     steps:
       - run:
@@ -116,7 +98,8 @@ jobs:
       - run_unit_tests
       - run_acceptance_tests
       - configure_gpg_and_passphrase
-      - build_all_platforms_and_sign
+      - build_all_platforms
+      - sign_builds
       - clean_gpg_keys
       - create_github_release
   build-no-release:
@@ -129,7 +112,7 @@ jobs:
       - run: go get -v -t -d ./...
       - run_unit_tests
       - run_acceptance_tests
-      - build_all_platforms_and_dont_sign
+      - build_all_platforms
 workflows:
   version: 2
   build-and-deploy:
