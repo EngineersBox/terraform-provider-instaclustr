@@ -134,4 +134,5 @@ workflows:
               ignore: /.*/
   commit-build-test:
     jobs:
-      - build-no-release
+      - build-no-release:
+          context: terraform provider
