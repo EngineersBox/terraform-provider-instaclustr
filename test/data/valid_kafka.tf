@@ -27,12 +27,18 @@ resource "instaclustr_cluster" "valid" {
             client_encryption = false
             auto_create_topics = true
             delete_topics = true
+            number_partitions = 10
+            zookeeper_node_count = 3
         }
     }
 
     bundle {
         bundle = "KAFKA_SCHEMA_REGISTRY"
         version = "kafka-schema-registry:5.0.0"
+    }
+    bundle {
+        bundle = "KAFKA_REST_PROXY"
+        version = "kafka-rest-proxy:5.0.0"
     }
 
 }
