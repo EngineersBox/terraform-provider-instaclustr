@@ -98,12 +98,11 @@ jobs:
       - run-unit-tests
       - run-acceptance-tests
       - configure-gpg-and-passphrase
-      - build-all-platform
+      - build-all-platforms
       - sign-builds
       - clean-gpg-keys
       - create-github-release
   build-no-release:
-    executor:
     docker:
       - image: circleci/golang:1.14
     working_directory: /go/src/github.com/arjunrajshekhar/terraform-provider-instaclustr
@@ -114,7 +113,6 @@ jobs:
       - run-acceptance-tests
       - build-all-platforms
 workflows:
-  version: 2
   build-and-deploy:
     jobs:
       - build-no-release:
@@ -126,5 +124,4 @@ workflows:
               ignore: /.*/
   commit-build-test:
     jobs:
-      - build-no-release:
-          context: terraform provider
+      - build-no-release
