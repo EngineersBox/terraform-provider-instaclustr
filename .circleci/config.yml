@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 commands: # a reusable command with parameters
   run-unit-tests:
     steps:
@@ -98,12 +98,11 @@ jobs:
       - run-unit-tests
       - run-acceptance-tests
       - configure-gpg-and-passphrase
-      - build-all-platform
+      - build-all-platforms
       - sign-builds
       - clean-gpg-keys
       - create-github-release
   build-no-release:
-    executor:
     docker:
       - image: circleci/golang:1.14
     working_directory: /go/src/github.com/arjunrajshekhar/terraform-provider-instaclustr
@@ -114,10 +113,9 @@ jobs:
       - run-acceptance-tests
       - build-all-platforms
 workflows:
-  version: 2
   build-and-deploy:
     jobs:
-      - build-no-release:
+      - build:
           filters:
             tags:
               only: /^v.*/
