@@ -118,6 +118,7 @@ workflows:
   build-and-deploy:
     jobs:
       - build-no-release:
+          context: terraform provider
           filters:
             tags:
               only: /^v.*/
@@ -125,4 +126,5 @@ workflows:
               ignore: /.*/
   commit-build-test:
     jobs:
-      - build-no-release
+      - build-no-release:
+          context: terraform provider
