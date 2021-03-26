@@ -106,7 +106,7 @@ commands: # a reusable command with parameters
       - run:
           name: "Check for PR"
           command: |
-            if [ -z << pipeline.parameters.is-pr >> ]; then
+            if [ << pipeline.parameters.is-pr >> -eq false ]; then
               if [ "${CIRLCE_BRANCH}" != "master" ]; then
                 echo "Not a PR or master, halting"
                 circleci step halt
