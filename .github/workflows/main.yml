@@ -12,11 +12,13 @@ jobs:
     steps:
     - name: Invoke CircleCI PR Workflow
       env:
+        CIRCLE_TOKEN: ${{ secrets.CIRCLE_TOKEN }}
         CIRCLE_BRANCH: ${{ github.head_ref }}
+        PROJECT_SLUG: gh/EngineersBox/terraform-provider-instaclustr
       run: |
         curl -X POST \
         -H 'Circle-Token: ${CIRCLE_TOKEN}' \
         -H 'Content-Type: application/json' \
         -H 'Accept: application/json' \
         -d "{\"branch\":\"${CIRCLE_BRANCH}\"}" \
-        https://circleci.com/api/v2/project/gh/EngineersBox/terraform-provider-instaclustr/pipeline
+        https://circleci.com/api/v2/project/${PROJECT_SLUG}/pipeline
