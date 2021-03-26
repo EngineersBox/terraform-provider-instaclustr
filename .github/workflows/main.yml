@@ -17,5 +17,5 @@ jobs:
         -H 'Circle-Token: ${CIRCLE_TOKEN}' \
         -H 'Content-Type: application/json' \
         -H 'Accept: application/json' \
-        -d "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{\"is_pr\":true}}" \
+        -d "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{\"is-pr\":true}}" \
         https://circleci.com/api/v2/project/${PROJECT_SLUG}/pipeline

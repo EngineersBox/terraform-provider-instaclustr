@@ -1,4 +1,8 @@
 version: 2.1
+parameters:
+  is-pr:
+    type: boolean
+    default: false
 commands: # a reusable command with parameters
   run-unit-tests:
     steps:
@@ -102,8 +106,8 @@ commands: # a reusable command with parameters
       - run:
           name: "Check for PR"
           command: |
-            if [ -z << parameters.is_pr >> ]; then
-              if [ "<< parameters.branch-name >>" != "master" ]; then
+            if [ -z << pipeline.parameters.is-pr >> ]; then
+              if [ "${CIRLCE_BRANCH}" != "master" ]; then
                 echo "Not a PR or master, halting"
                 circleci step halt
               fi
