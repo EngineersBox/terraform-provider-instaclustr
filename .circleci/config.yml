@@ -137,7 +137,7 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      - build-no-release:
+      - commit-build-test:
           context: terraform provider
           filters:
             tags:
