@@ -108,7 +108,7 @@ commands: # a reusable command with parameters
           # Fix this pain in the ass boolean comparison of the is-pr parameter
           command: |
             if [ << pipeline.parameters.is-pr >> ]; then
-              echo "Not a PR or master, halting PR wokflow"
+              echo "Not a PR trigger halting PR wokflow"
             else
               if [ "${CIRLCE_BRANCH}" != "master" ]; then
                 echo "Not a PR or master, halting PR workflow"
