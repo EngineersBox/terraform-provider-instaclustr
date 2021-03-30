@@ -130,7 +130,6 @@ jobs:
       - image: circleci/golang:1.14
     working_directory: /go/src/github.com/arjunrajshekhar/terraform-provider-instaclustr
     steps:
-      - check-for-branch-pr
       - checkout
       - run: go get -v -t -d ./...
       - run-acceptance-tests
