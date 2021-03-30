@@ -107,13 +107,13 @@ commands: # a reusable command with parameters
           name: "Check for PR"
           # Fix this pain in the ass boolean comparison of the is-pr parameter
           command: |
-            if [ << pipeline.parameters.is-pr >> ]; then
-              echo "Not a PR trigger halting PR wokflow"
-            else
+            if [ ! << pipeline.parameters.is-pr >> ]; then
               if [ "${CIRLCE_BRANCH}" != "master" ]; then
                 echo "Not a PR or master, halting PR workflow"
                 circleci step halt
               fi
+            else
+              echo "Not a PR trigger halting PR wokflow"
             fi
 jobs:
   build:
