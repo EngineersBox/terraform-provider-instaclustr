@@ -116,7 +116,7 @@ jobs:
       - sign-builds
       - clean-gpg-keys
       - create-github-release
-  build-no-release:
+  commit-build-test:
     docker:
       - image: circleci/golang:1.14
     working_directory: /go/src/github.com/arjunrajshekhar/terraform-provider-instaclustr
@@ -125,7 +125,7 @@ jobs:
       - run: go get -v -t -d ./...
       - run-unit-tests
       - build-all-platforms
-  build-test-pr:
+  pr-build-test:
     docker:
       - image: circleci/golang:1.14
     working_directory: /go/src/github.com/arjunrajshekhar/terraform-provider-instaclustr
@@ -149,7 +149,7 @@ workflows:
       and:
         - not:  << pipeline.parameters.is-pr >>
     jobs:
-      - build-no-release:
+      - commit-build-test:
           context: terraform provider
   pr-build-test:
     when:
@@ -158,5 +158,5 @@ workflows:
         - not:
             equal: [ "master", "${CIRLCE_BRANCH}" ]
     jobs:
-      - build-test-pr:
+      - pr-build-test:
           context: terraform provider
