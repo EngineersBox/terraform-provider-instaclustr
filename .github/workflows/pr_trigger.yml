@@ -14,6 +14,6 @@ jobs:
         PROJECT_SLUG: gh/EngineersBox/terraform-provider-instaclustr
       run: |
         curl -X POST \
-        -H 'Circle-Token: a7ba232028b86cff5396141a7dfa7f25bf451eba' \
+        -H 'Circle-Token: ${{ secrets.CIRCLE_TOKEN }}' \
         -d '{"branch":"${GITHUB_REF##*/}", "parameters":{"is-pr":true}}' \
         https://circleci.com/api/v2/project/${PROJECT_SLUG}/pipeline
