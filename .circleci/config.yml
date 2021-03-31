@@ -4,32 +4,31 @@ parameters:
     type: boolean
     default: false
 commands: # a reusable command with parameters
+  build-provider:
+    steps:
+      - run:
+          name: "Build provider to binary"
+          command: make build
   run-unit-tests:
     steps:
       - run:
-          name: "Run Project Tests"
-          command: |
-            make build
-            make test
+          name: "Run unit tests"
+          command: make test
   run-acceptance-tests:
     steps:
       - run:
-          name: "Run Acceptance Tests"
-          command: |
-            make build
-            make testacc
-  configure-gpg-and-passphrase:
+          name: "Run acceptance tests"
+          command: make testacc
+  configure-credentials:
     steps:
       - run:
-          name: "Run Project Tests"
+          name: "Configure Instaclustr credentials"
           command: |
             export IC_USERNAME=${IC_TEST_USERNAME}
             export IC_API_KEY=${IC_TEST_API_KEY}
             export KMS_ARN=${IC_TEST_KMS_ARN}
             export IC_PROV_ACC_NAME=${IC_TEST_PROV_ACC_NAME}
             export IC_PROV_VPC_ID=${IC_TEST_PROV_VPC_ID}
-            make build
-            make testacc
       - run:
           name: "Import GPG key"
           command: |
@@ -47,7 +46,7 @@ commands: # a reusable command with parameters
             for keygrip in $(gpg --batch --yes --with-colons --with-keygrip --list-secret-keys ${GIT_EMAIL} | grep grp | sed 's|[grp:,]||g'); do
               /usr/lib/gnupg2/gpg-preset-passphrase --preset --passphrase ${GPG_PASSPHRASE} ${keygrip}
             done
-  build-all-platforms:
+  package-all-platforms:
     steps:
       - run:
           name: "Build for Windows, Linux and OSX and sign the assets"
@@ -73,7 +72,7 @@ commands: # a reusable command with parameters
   sign-builds:
     steps:
       - run:
-          name: "Sign the builds with gpg and sha"
+          name: "Sign builds with GPG and SHA256"
           command: |
             cd bin
             shasum -a 256 *.zip > ${SHASUM_NAME}_SHA256SUMS
@@ -109,10 +108,11 @@ jobs:
     steps:
       - checkout
       - run: go get -v -t -d ./...
+      - configure-credentials
       - run-unit-tests
       - run-acceptance-tests
-      - configure-gpg-and-passphrase
-      - build-all-platforms
+      - build-provider
+      - package-all-platforms
       - sign-builds
       - clean-gpg-keys
       - create-github-release
@@ -123,8 +123,9 @@ jobs:
     steps:
       - checkout
       - run: go get -v -t -d ./...
+      - configure-credentials
       - run-unit-tests
-      - build-all-platforms
+      - package-all-platforms
   pr-build-test:
     docker:
       - image: circleci/golang:1.14
@@ -132,8 +133,10 @@ jobs:
     steps:
       - checkout
       - run: go get -v -t -d ./...
+      - run-unit-tests
       - run-acceptance-tests
-      - build-all-platforms
+      - build-provider
+      - package-all-platforms
 workflows:
   build-and-deploy:
     jobs:
@@ -145,14 +148,14 @@ workflows:
             branches:
               ignore: /.*/
   commit-build-test:
-    when:
+    when: # Only run workflow when not a PR event
       and:
         - not:  << pipeline.parameters.is-pr >>
     jobs:
       - commit-build-test:
           context: terraform provider
   pr-build-test:
-    when:
+    when: # Only run workflow when triggered by PR event and not on a master branch
       and:
         - equal: [ true, << pipeline.parameters.is-pr >> ]
         - not:
