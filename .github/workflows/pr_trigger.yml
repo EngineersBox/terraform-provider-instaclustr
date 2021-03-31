@@ -11,6 +11,8 @@ jobs:
     steps:
     - name: Show branch
       run: echo ${GITHUB_REF##*/}
+    - name: Echo token
+      run: echo ${{ secrets.CIRCLE_TOKEN }}
     - name: Invoke CircleCI PR Workflow
       env:
         CIRCLE_TOKEN: ${{ secrets.CIRCLE_TOKEN }}
