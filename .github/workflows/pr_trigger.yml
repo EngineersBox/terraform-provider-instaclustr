@@ -15,5 +15,5 @@ jobs:
       run: |
         curl -X POST \
         -H 'Circle-Token: ${{ secrets.CIRCLE_TOKEN }}' \
-        -d '{"branch":"INS-12888-Enable-CircleCI-Build-Test-On-Commit", "parameters":{"is-pr":true}}' \
+        -d '{"branch":"${GITHUB_REF##*/}", "parameters":{"is-pr":true}}' \
         https://circleci.com/api/v2/project/${PROJECT_SLUG}/pipeline
