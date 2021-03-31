@@ -11,7 +11,7 @@ jobs:
     steps:
     - name: Invoke CircleCI PR Workflow
       env:
-        CIRCLE_TOKEN: "${{ secrets.CIRCLE_TOKEN }}"
+        CIRCLE_TOKEN: "a7ba232028b86cff5396141a7dfa7f25bf451eba"
         PROJECT_SLUG: gh/EngineersBox/terraform-provider-instaclustr
       run: |
         curl -X POST \
